@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#02060b">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="JARVIS">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="manifest" href="manifest.webmanifest">
+<title>J.A.R.V.I.S.</title>
+<style>
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;height:100%;overflow:hidden;background:#02060b;color:#00d8ff;font-family:Arial,Helvetica,sans-serif}
+button,input{font:inherit}button{cursor:pointer}
+.app{height:100dvh;position:relative;display:flex;flex-direction:column;overflow:hidden;background:
+radial-gradient(circle at 50% 25%,rgba(0,216,255,.12),transparent 28%),
+radial-gradient(circle at 50% 80%,rgba(0,90,150,.08),transparent 45%),#02060b}
+.grid{position:absolute;inset:0;opacity:.55;pointer-events:none;background-image:linear-gradient(rgba(0,216,255,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(0,216,255,.035) 1px,transparent 1px);background-size:38px 38px}
+.scan{position:absolute;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,#00d8ff,transparent);opacity:.25;animation:scan 8s linear infinite;pointer-events:none}
+@keyframes scan{from{top:8%;opacity:0}15%{opacity:.3}80%{opacity:.3}to{top:92%;opacity:0}}
+@keyframes rot{to{transform:rotate(360deg)}}@keyframes rotrev{to{transform:rotate(-360deg)}}
+@keyframes glow{50%{filter:brightness(1.65);opacity:1}}@keyframes up{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.header{height:62px;padding:calc(9px + env(safe-area-inset-top)) 15px 8px;border-bottom:1px solid #00d8ff22;display:flex;align-items:center;justify-content:space-between;z-index:5}
+.brand{font:700 13px "Courier New",monospace;letter-spacing:3px}.sub{font:8px "Courier New",monospace;letter-spacing:2px;color:#00d8ff66;margin-top:3px}
+.status{font:9px "Courier New",monospace;letter-spacing:1.7px}.led{display:inline-block;width:6px;height:6px;border-radius:50%;background:#00ff9d;box-shadow:0 0 10px #00ff9d;margin-right:5px}
+.time{font:9px "Courier New",monospace;color:#fff5;letter-spacing:1px;text-align:right}.gear{border:0;background:none;color:#00d8ff;font-size:17px;opacity:.5;padding:2px}
+.hero{height:250px;flex-shrink:0;display:grid;place-items:center;position:relative}
+.hud{position:absolute;top:55px;font:7px "Courier New",monospace;line-height:1.8;letter-spacing:1px;color:#00d8ff55}.hud.l{left:13px}.hud.r{right:13px;text-align:right}.ok{color:#00ff9d}
+.core{width:202px;height:202px;position:relative;display:grid;place-items:center}
+.ring{position:absolute;border-radius:50%;inset:0;border:1px solid #00d8ff35}.a{inset:2px;border:1px dashed #00d8ff55;animation:rot 19s linear infinite}.b{inset:15px;border:2px solid #00d8ff16;border-top-color:#00d8ff;animation:rotrev 8s linear infinite}.c{inset:30px;border:1px dashed #00d8ff5c;animation:rot 6s linear infinite}.d{inset:46px;border:2px solid #00d8ff18;border-left-color:#00d8ff;animation:rotrev 3s linear infinite}.e{inset:62px;border:1px solid #00d8ff66}
+.node{position:absolute;width:5px;height:5px;border-radius:50%;background:#8ff6ff;box-shadow:0 0 12px #00d8ff}
+.n1{top:8px;left:50%}.n2{right:21px;top:39px}.n3{bottom:19px;right:40px}.n4{left:18px;bottom:42px}
+.corecenter{width:92px;height:92px;border-radius:50%;background:radial-gradient(circle,#d8ffff 0%,#31eaff 8%,#007aa0 20%,#031824 48%,#02060b 72%);box-shadow:0 0 18px #00d8ff,0 0 55px #00d8ff55,inset 0 0 30px #00d8ff55;animation:glow 2.8s ease-in-out infinite}
+.corecenter:after{content:"";position:absolute;inset:77px;border-radius:50%;border:1px solid #8ff6ff88}
+.arc{position:absolute;bottom:1px;font:10px "Courier New",monospace;letter-spacing:7px;color:#8fefff99}
+.messages{flex:1;overflow:auto;padding:2px 13px 8px;scroll-behavior:smooth}.empty{text-align:center;font:9px "Courier New",monospace;letter-spacing:2px;color:#00d8ff33;margin-top:12px}
+.msg{display:flex;margin-bottom:10px;animation:up .25s ease}.user{justify-content:flex-end}.bubble{max-width:89%;padding:10px 12px;border:1px solid #00d8ff28;background:#00d8ff08;border-radius:14px 14px 14px 3px;color:#d8faff;font-size:14px;line-height:1.5;white-space:pre-wrap}.user .bubble{background:#00d8ff0e;border-color:#00d8ff40;border-radius:14px 14px 3px 14px}.tag{font:8px "Courier New",monospace;letter-spacing:2px;color:#00d8ff66;margin-bottom:4px}
+.bottom{padding:9px 12px calc(11px + env(safe-area-inset-bottom));border-top:1px solid #00d8ff18;background:#02060bf5;z-index:5}.row{display:flex;gap:8px;align-items:center}.circle{width:47px;height:47px;flex:none;border-radius:50%;border:1px solid #00d8ff42;background:#00d8ff08;color:#74edff;font-size:18px}.mic{width:57px;height:57px;border:2px solid #00d8ff88;box-shadow:0 0 24px #00d8ff18;font-size:22px}.mic.active{border-color:#00ff9d;color:#00ff9d;box-shadow:0 0 24px #00ff9d33}.input{min-width:0;flex:1;height:47px;border:1px solid #00d8ff30;border-radius:24px;background:#00d8ff06;color:#dffcff;padding:0 15px;font-size:14px;outline:none}.input::placeholder{color:#fff3}.state{text-align:center;font:8px "Courier New",monospace;color:#00d8ff55;letter-spacing:1.5px;margin-top:6px}
+.panel{position:absolute;inset:0;background:#02060bfc;z-index:20;padding:calc(18px + env(safe-area-inset-top)) 18px 20px;overflow:auto}.panel h2{font:11px "Courier New",monospace;letter-spacing:3px;font-weight:normal}.panel p{font-size:12px;color:#fff7;line-height:1.55}.panel label{display:block;font:9px "Courier New",monospace;letter-spacing:2px;color:#b987ff;margin:20px 0 8px}.panel input{width:100%;padding:12px;border:1px solid #a855f755;border-radius:8px;background:#a855f70b;color:#e4d5ff;outline:none}.panel button.action{width:100%;padding:12px;margin-top:9px;border-radius:8px;border:1px solid #00d8ff35;background:#00d8ff08;color:#00d8ff}
+</style>
+</head>
+<body>
+<div class="app"><div class="grid"></div><div class="scan"></div>
+<header class="header">
+ <div><div class="brand">J.A.R.V.I.S.</div><div class="sub">STARK INDUSTRIES · AI CORE</div></div>
+ <div class="status"><span class="led"></span>SISTEMA ONLINE</div>
+ <div><div class="time" id="time"></div><button class="gear" id="gear">⚙</button></div>
+</header>
+<section class="hero">
+ <div class="hud l">IA CORE&nbsp;&nbsp;&nbsp;<span class="ok">OK</span><br>VOICE I/O&nbsp;<span class="ok">READY</span><br>MEMORY&nbsp;&nbsp;&nbsp;<span class="ok">LOCAL</span></div>
+ <div class="hud r">NEURAL LINK <span class="ok">ACTIVE</span><br>SECURITY&nbsp;&nbsp;&nbsp;<span class="ok">OK</span><br>LATENCY&nbsp;&nbsp;&nbsp;&nbsp;—</div>
+ <div class="core"><div class="ring a"></div><div class="ring b"></div><div class="ring c"></div><div class="ring d"></div><div class="ring e"></div><i class="node n1"></i><i class="node n2"></i><i class="node n3"></i><i class="node n4"></i><div class="corecenter"></div><div class="arc">J A R V I S</div></div>
+</section>
+<main class="messages" id="messages"></main>
+<footer class="bottom"><div class="row">
+ <button class="circle" id="menu">☰</button><button class="circle mic" id="mic">●</button>
+ <input class="input" id="input" placeholder="Escribir o hablar, señor..." autocomplete="off">
+ <button class="circle" id="send">➤</button>
+</div><div class="state" id="state">JARVIS · LISTO</div></footer>
+<section class="panel" id="panel" hidden>
+ <button class="circle" id="close" style="float:right">✕</button><h2>CONFIGURACIÓN DEL SISTEMA</h2>
+ <p>Señor, puede usar JARVIS en modo demostración sin API o conectar su propio núcleo de OpenAI.</p>
+ <label>OPENAI API KEY</label><input id="key" type="password" placeholder="sk-...">
+ <button class="action" id="save">GUARDAR CLAVE</button>
+ <button class="action" id="clear">BORRAR MEMORIA</button>
+ <p style="margin-top:24px">INSTALACIÓN EN IPHONE<br><br>Abra la dirección HTTPS de JARVIS en Safari → Compartir ↑ → Añadir a pantalla de inicio.</p>
+</section>
+<script>
+const SYS='Eres JARVIS, un asistente elegante, conciso, ligeramente irónico y absolutamente leal. Responde siempre en español y dirígete al usuario como "señor" en cada respuesta. Sé preciso y no inventes acciones.';
+let history=JSON.parse(localStorage.getItem('jarvis_history')||'[]'),busy=false,rec=null,listening=false;
+const $=x=>document.getElementById(x);
+function clock(){$('time').textContent=new Date().toLocaleTimeString('es-ES')}setInterval(clock,1000);clock();
+function render(){const m=$('messages');m.innerHTML='';if(!history.length){m.innerHTML='<div class="empty">SISTEMA ACTIVO · ESPERANDO INSTRUCCIONES, SEÑOR</div>';return}history.slice(-40).forEach(x=>{const r=document.createElement('div');r.className='msg '+(x.role==='user'?'user':'assistant');const b=document.createElement('div');b.className='bubble';if(x.role!=='user'){const t=document.createElement('div');t.className='tag';t.textContent='JARVIS · AI CORE';b.appendChild(t)}const p=document.createElement('div');p.textContent=x.content;b.appendChild(p);r.appendChild(b);m.appendChild(r)});m.scrollTop=m.scrollHeight}
+function add(role,content){history.push({role,content});history=history.slice(-40);localStorage.setItem('jarvis_history',JSON.stringify(history));render()}
+function speak(t){if(!speechSynthesis)return;speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.lang='es-ES';u.rate=.9;u.pitch=.75;u.onstart=()=>{$('state').textContent='JARVIS · RESPONDIENDO'};u.onend=()=>{$('state').textContent='JARVIS · LISTO'};speechSynthesis.speak(u)}
+function demo(t){const q=t.toLowerCase();if(q.includes('hora'))return 'Son las '+new Date().toLocaleTimeString('es-ES')+', señor.';if(q.includes('fecha'))return 'Hoy es '+new Date().toLocaleDateString('es-ES',{weekday:'long',year:'numeric',month:'long',day:'numeric'})+', señor.';if(q.includes('hola')||q.includes('buenas'))return 'Buenos días, señor. Todos los sistemas están operativos. ¿En qué puedo ayudarle?';if(q.includes('quién eres')||q.includes('quien eres'))return 'Soy JARVIS, señor. Su interfaz de asistencia inteligente. El núcleo de IA está preparado para recibir órdenes.';if(q.includes('gracias'))return 'Siempre a su servicio, señor.';return 'He recibido la instrucción, señor. El núcleo local está funcionando. Para obtener respuestas inteligentes completas, conecte una API de OpenAI desde ⚙.'}
+async function send(t){t=(t||'').trim();if(!t||busy)return;add('user',t);$('input').value='';const key=localStorage.getItem('jarvis_openai_key')||'';if(!key){const a=demo(t);add('assistant',a);speak(a);return}busy=true;$('state').textContent='JARVIS · PROCESANDO';const typ=document.createElement('div');typ.className='msg assistant';typ.id='typing';typ.innerHTML='<div class="bubble"><div class="tag">JARVIS · PROCESANDO</div>Analizando, señor…</div>';$('messages').appendChild(typ);$('messages').scrollTop=$('messages').scrollHeight;try{const r=await fetch('https://api.openai.com/v1/chat/completions',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+key},body:JSON.stringify({model:'gpt-4o',messages:[{role:'system',content:SYS},...history],max_tokens:1000,temperature:.5})});const d=await r.json();if(!r.ok)throw Error();const a=d.choices?.[0]?.message?.content||'No he recibido una respuesta válida, señor.';typ.remove();add('assistant',a);speak(a)}catch(e){typ.remove();const a='Señor, no puedo contactar con el núcleo de OpenAI. Compruebe la clave y la conexión a Internet.';add('assistant',a);$('state').textContent='JARVIS · ERROR';speak(a)}finally{busy=false}}
+$('send').onclick=()=>send($('input').value);$('input').addEventListener('keydown',e=>{if(e.key==='Enter')send($('input').value)});
+function mic(){const SR=window.SpeechRecognition||window.webkitSpeechRecognition;if(!SR){$('state').textContent='VOZ NO DISPONIBLE · USE SAFARI';return}if(listening){rec.stop();return}rec=new SR();rec.lang='es-ES';rec.interimResults=true;rec.continuous=false;listening=true;$('mic').classList.add('active');$('state').textContent='JARVIS · ESCUCHANDO';rec.onresult=e=>{let t=Array.from(e.results).map(x=>x[0].transcript).join('');$('input').value=t;if(e.results[e.results.length-1].isFinal){listening=false;$('mic').classList.remove('active');send(t)}};rec.onerror=()=>{listening=false;$('mic').classList.remove('active');$('state').textContent='JARVIS · LISTO'};rec.onend=()=>{listening=false;$('mic').classList.remove('active');if($('state').textContent.includes('ESCUCHANDO'))$('state').textContent='JARVIS · LISTO'};try{rec.start()}catch{}}
+$('mic').onclick=mic;function openPanel(){$('panel').hidden=false;$('key').value=localStorage.getItem('jarvis_openai_key')||''}$('gear').onclick=openPanel;$('menu').onclick=openPanel;$('close').onclick=()=>$('panel').hidden=true;
+$('save').onclick=()=>{const k=$('key').value.trim();k?localStorage.setItem('jarvis_openai_key',k):localStorage.removeItem('jarvis_openai_key');$('panel').hidden=true};
+$('clear').onclick=()=>{localStorage.removeItem('jarvis_history');history=[];render();$('panel').hidden=true};
+render();
+if('serviceWorker'in navigator)navigator.serviceWorker.register('./sw.js').catch(()=>{});
+</script></div>
+</body></html>
